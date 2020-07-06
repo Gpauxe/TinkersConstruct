@@ -29,9 +29,7 @@ import net.minecraftforge.common.crafting.ConditionalAdvancement;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.conditions.ConfigOptionEnabledCondition;
@@ -39,11 +37,11 @@ import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.gadgets.entity.FrameType;
 import slimeknights.tconstruct.library.materials.MaterialId;
+import slimeknights.tconstruct.library.materials.MaterialValues;
 import slimeknights.tconstruct.library.recipe.casting.CastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelBuilder;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipeBuilder;
-import slimeknights.tconstruct.library.materials.MaterialValues;
-import slimeknights.tconstruct.library.registration.object.BlockItemObject;
 import slimeknights.tconstruct.library.registration.object.BuildingBlockObject;
 import slimeknights.tconstruct.library.registration.object.FluidObject;
 import slimeknights.tconstruct.shared.TinkerCommons;
@@ -82,6 +80,7 @@ public class TConstructRecipeProvider extends RecipeProvider implements IConditi
     this.addModifierRecipes(consumer);
     this.addMaterialRecipes(consumer);
     this.addSmelteryRecipes(consumer);
+    this.addMeltingRecipes(consumer);
     this.addGadgetRecipes(consumer);
     this.addPartBuilderRecipes(consumer);
     this.addMaterialsRecipes(consumer);
@@ -772,6 +771,13 @@ public class TConstructRecipeProvider extends RecipeProvider implements IConditi
     this.addCastCastingRecipe(consumer, TinkerToolParts.largePlate, TinkerSmeltery.largePlateCast);
     this.addCastCastingRecipe(consumer, TinkerToolParts.shovelHead, TinkerSmeltery.shovelHeadCast);
 
+  }
+
+  private void addMeltingRecipes(Consumer<IFinishedRecipe> consumer) {
+    // fuels
+    MeltingFuelBuilder.fuel(new FluidStack(Fluids.LAVA, 50), 100)
+                      .addCriterion("has_item", hasItem(Items.LAVA_BUCKET))
+                      .build(consumer, location("melting/fuel/lava"));
   }
 
   private void addSlimeRecipes(Consumer<IFinishedRecipe> consumer) {
